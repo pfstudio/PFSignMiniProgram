@@ -1,0 +1,15 @@
+<!--pages/me/me.wxml-->
+<form bindsubmit="saveInfo" bindreset="clearInfo">
+  <view>
+    <view>姓名</view>
+    <input name="name" placeholder="你的姓名" value='{{name}}' />
+  </view>
+    <view>
+    <view>学号</view>
+    <input name="studentId" placeholder="你的学号" value='{{studentId}}' />
+  </view>
+  <view>
+    <button formType="submit">保存</button>
+    <button formType="reset">清空</button>
+  </view>
+</form>

@@ -1,0 +1,18 @@
+/**
+ * 小程序配置文件
+ */
+
+var host = 'https://domain';
+
+var config = {
+
+  service: {
+    host,
+
+    signInUrl: `${host}/Record/SignIn`,
+    signOutUrl: `${host}/Record/SignOut`,
+    queryUrl: `${host}/Record/Query`,
+  }
+};
+
+module.exports = config;

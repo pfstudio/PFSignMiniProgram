@@ -1,0 +1,32 @@
+{
+  "pages":[
+    "pages/index/index",
+    "pages/me/me",
+    "pages/detail/detail"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#3a73f6",
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "攀峰签到"
+  },
+  "tabBar": {
+    "color": "#8a8a8a",
+    "selectedColor": "#000",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/index.png",
+        "selectedIconPath": "images/index-selected.png"
+      },
+      {
+        "pagePath": "pages/detail/detail",
+        "text": "详情",
+        "iconPath": "images/detail.png",
+        "selectedIconPath": "images/detail-selected.png"
+      }
+    ]
+  },
+  "debug": false
+}
