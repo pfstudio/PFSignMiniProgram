@@ -1,8 +1,11 @@
 //index.js
 var api = require('../../utils/api.js')
 //获取应用实例
+//工作室所在维度
+var pf_latitude = 30.316
+//工作室所在经度
+var pf_longitude = 120.338
 const app = getApp()
-
 Page({
   data: {
     name: '毛寅滔',
@@ -20,6 +23,7 @@ Page({
     } 
   },
   signIn: function() {
+    var that=this
     if(!this.data.hasInfo) {
       console.log('no info')
       wx.showModal({
@@ -31,7 +35,28 @@ Page({
       })
     }
     else {
-      api.signIn(this.data.name, this.data.studentId)
+      wx.getLocation({
+        success: function(res) {
+          
+          console.log(res)
+          console.log(pf_latitude)
+          if (Math.abs(res.latitude-pf_latitude)>0.0005 || Math.abs(res.longitude-pf_longitude)>0.0005)
+          {
+            wx.showModal({
+              title: 'Warning!',
+              content: '检测到你未在攀峰工作室登录',
+              success:function(res)
+              {
+                api.signIn(that.data.name, that.data.studentId)
+              }
+            })
+          }
+          else
+            api.signIn(that.data.name, that.data.studentId)
+        },
+      })
+      
+      
     }
   },
   signOut: function() {
@@ -43,6 +68,7 @@ Page({
         success: () =>
           wx.navigateTo({ url: '../me/me' })
       })
+      
     }
     else {
       api.signOut(this.data.studentId)
