@@ -1,6 +1,6 @@
 var config = require('../config.js')
-
 // 签到
+
 export function signIn(name, studentId) {
   wx.request({
     url: config.service.signInUrl,

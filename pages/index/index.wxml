@@ -1,6 +1,8 @@
 <!--index.wxml-->
+<view class = "touch" bindtouchstart = "touchStart" bindtouchmove = "touchMove" bindtouchend = "touchEnd"> 
 <view>
   <button bindtap='signIn'>签到</button>
   <button bindtap='signOut'>签退</button>
   <button bindtap='bindInfo'>绑定</button>
+</view>
 </view>

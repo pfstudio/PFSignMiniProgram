@@ -25,6 +25,12 @@
         "text": "详情",
         "iconPath": "images/detail.png",
         "selectedIconPath": "images/detail-selected.png"
+      },
+      {
+        "pagePath": "pages/me/me",
+        "text": "我",
+        "iconPath": "images/detail.png",
+        "selectedIconPath": "images/detail-selected.png"
       }
     ]
   },
