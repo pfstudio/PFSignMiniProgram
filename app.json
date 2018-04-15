@@ -2,7 +2,8 @@
   "pages":[
     "pages/index/index",
     "pages/me/me",
-    "pages/detail/detail"
+    "pages/detail/detail",
+    "pages/bindInfo/bindInfo"
   ],
   "window":{
     "backgroundTextStyle":"light",
@@ -29,8 +30,8 @@
       {
         "pagePath": "pages/me/me",
         "text": "我",
-        "iconPath": "images/detail.png",
-        "selectedIconPath": "images/detail-selected.png"
+        "iconPath": "images/me.png",
+        "selectedIconPath": "images/me-selected.png"
       }
     ]
   },
