@@ -1,4 +1,11 @@
 <!--pages/detail/detail.wxml-->
+<view>
+  <picker mode="date" value="{{date}}" bindchange="bindDateChange">
+    <view>
+      当前选择: {{date}}
+    </view>
+  </picker>
+</view>
 <scroll-view scroll-x>
     <block wx:for="{{records}}" wx:key="records" wx:for-item="record">
       <view>{{record.name}}</view>

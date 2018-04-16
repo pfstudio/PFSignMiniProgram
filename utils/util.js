@@ -23,8 +23,17 @@ function catchError(ex) {
   }
 }
 
+function formatDate(date) {
+  var year = date.getFullYear()
+  var month = date.getMonth() + 1
+  var day = date.getDate()
+
+  return [year, month, day].join('-')
+}
+
 module.exports = {
   wxPromisify: wxPromisify,
   catchError: catchError,
-  noRealError: { noRealError: true }
+  noRealError: { noRealError: true },
+  formatDate: formatDate
 }
