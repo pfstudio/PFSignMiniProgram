@@ -1,5 +1,5 @@
 <!--pages/me/me.wxml-->
-<view> 
+<view class = "touch" bindtouchstart = "touchStart" bindtouchmove = "touchMove" bindtouchend = "touchEnd"> 
 <form bindsubmit="saveInfo" bindreset="clearInfo">
   <view>
     <view>姓名</view>

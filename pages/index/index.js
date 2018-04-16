@@ -1,6 +1,7 @@
 //index.js
 var api = require('../../utils/api.js')
 var util = require('../../utils/util.js')
+var touch = require('../../utils/touch.js')
 //获取应用实例
 const app = getApp()
 const pf_latitude  = app.globalData.latitude
@@ -30,8 +31,22 @@ Page({
   signOut: function() {
     api.signOut(this.data.studentId)
   },
+  // 触摸开始事件
+  touchStart: function (e) {
+    touch.touch_Start(e);
+  },
+  //监听触摸方向,dir表示触摸方向,1代表触摸向左,2代表向右
+  touchMove: function (e) {
+    var dir = touch.touch_Move(e);
+    if (dir == 1) {
+      wx.switchTab({
+        url: '../detail/detail',
+      })
+    }
+  },
   bindInfo: () => {
     wx.navigateTo({url: '../bindInfo/bindInfo'})
+
   }
 })
 

@@ -1,7 +1,7 @@
 // pages/me/me.js
 //获取应用实例
 const app = getApp()
-
+var touch = require('../../utils/touch.js')
 Page({
   data: {
     name: '',
@@ -43,5 +43,18 @@ Page({
       success: res =>
         that.setData({'studentId': ''})
     })
-  }
+  },
+  //触摸监听开始
+  touchStart: function (e) {
+    touch.touch_Start(e);
+  },
+  //监听触摸方向,dir表示触摸方向,1代表触摸向左,2代表向右
+  touchMove: function (e) {
+    var dir = touch.touch_Move(e);
+    if (dir == 2) {
+      wx.switchTab({
+        url: '../detail/detail',
+      })
+    }
+  },
 })
