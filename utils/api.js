@@ -1,5 +1,5 @@
 var config = require('../config.js')
-const buttonColor = getApp().globalData.buttonColor
+const buttonColor = config.buttonColor
 
 // 签到
 function signIn(studentId, name) {

@@ -1,11 +1,9 @@
 <!--pages/detail/detail.wxml-->
-<view class = "touch" bindtouchstart = "touchStart" bindtouchmove = "touchMove" bindtouchend = "touchEnd">
-<scroll-view scroll-x>  
-  
-    <block wx:for="{{records}}" wx:key="records" wx:for-item="record">
-      <view>{{record.name}}</view>
-      <view>{{record.signInTime}}</view>
-      <view>{{record.signOutTime}}</view>
-    </block>
+<scroll-view scroll-x="true" enable-back-to-top="true" bindtouchstart='touchStart' bindtouchend='touchMove'>  
+  <block wx:for="{{records}}" wx:key="records" wx:for-item="record">
+    <view>{{record.name}}</view>
+    <view>{{record.signInTime}}</view>
+    <view>{{record.signOutTime}}</view>
+  </block>
 </scroll-view>
-</view>
+<view class='touch' bindtouchstart='touchStart' bindtouchmove='touchMove'></view>

@@ -2,29 +2,30 @@
 var api = require('../../utils/api.js')
 var util = require('../../utils/util.js')
 var touch = require('../../utils/touch.js')
-//获取应用实例
-const app = getApp()
-const pf_latitude  = app.globalData.latitude
-const pf_longitude = app.globalData.longitude
+const config = require('../../config.js')
 
 Page({
   data: {
-    name: '毛寅滔',
-    studentId: '16073120',
-    hasInfo: false
+    name: '',
+    studentId: ''
   },
   onShow: function() {
-    this.setData({
-      name: wx.getStorageSync('name'),
-      studentId: wx.getStorageSync('studentId')
+    // 从本地获取Info
+    let that = this;
+    wx.getStorage({
+      key: 'name',
+      success: res =>
+        that.setData({ name: res.data })
     })
-    if (this.data.studentId && this.data.name) {
-      this.setData({hasInfo: true})
-    } 
+    wx.getStorage({
+      key: 'studentId',
+      success: res =>
+        that.setData({ studentId: res.data })
+    })
   },
   signIn: function() {
-    ensureInfo(this.data.hasInfo)
-      .then(() => checkLocation())
+    ensureInfo(this.data)
+      .then(() => checkLocation(config.pfStudio))
       .then(() => api.signIn(this.data.studentId, this.data.name))
       .catch(util.catchError)
   },
@@ -32,27 +33,19 @@ Page({
     api.signOut(this.data.studentId)
   },
   // 触摸开始事件
-  touchStart: function (e) {
-    touch.touch_Start(e);
-  },
-  //监听触摸方向,dir表示触摸方向,1代表触摸向左,2代表向右
-  touchMove: function (e) {
-    var dir = touch.touch_Move(e);
-    if (dir == 1) {
-      wx.switchTab({
-        url: '../detail/detail',
-      })
-    }
-  },
+  touchStart: touch.touchStartFactory(),
+  //监听触摸方向
+  touchMove: touch.touchMoveFactory({
+    right: '../detail/detail'
+  }),
   bindInfo: () => {
     wx.navigateTo({url: '../bindInfo/bindInfo'})
-
   }
 })
 
-function ensureInfo(hasInfo) {
+function ensureInfo(info) {
   return new Promise((resolve, reject) => {
-    if(hasInfo) {
+    if(info.studentId && info.name) {
       resolve()
     }
     else {
@@ -70,12 +63,12 @@ function ensureInfo(hasInfo) {
   })
 }
 
-function checkLocation() {
+function checkLocation(loc) {
   return new Promise((resolve, reject) => {
     wx.getLocation({
       success: res => {
         console.log(res)
-        if (Math.abs(res.latitude - pf_latitude) > 0.0005 || Math.abs(res.longitude - pf_longitude) > 0.0005) {
+        if (Math.abs(res.latitude - loc.latitude) > 0.0005 || Math.abs(res.longitude - loc.longitude) > 0.0005) {
           wx.showModal({
             title: 'Warning!',
             content: '检测到你未在攀峰工作室登录,或者你手机飘了',

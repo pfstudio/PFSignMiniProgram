@@ -1,19 +1,29 @@
-var touchDot = 0//触摸时的原点 
-export function touch_Start(e) {
-  touchDot = e.touches[0].pageX; // 获取触摸时的原点 
-}
-// 触摸移动事件 
-export function touch_Move(e) {
-  var touchMove = e.touches[0].pageX
-  console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot));
-  // 向左滑动  
-  if (touchMove - touchDot <= -100) {
-    //左滑返回1
-      return 1
-    }
-  // 向右滑动 
-  if (touchMove - touchDot >= 100) {
-    //右滑返回2
-      return 2
+// 触发滑动的阈值
+const threshold = 75;
+//触摸时的原点
+var touchDot = 0
+
+function touchStartFactory() {
+  return e => {
+    touchDot = e.touches[0].pageX
   }
+}
+
+function touchMoveFactory(pageUrl) {
+  return e => {
+    console.log(e)
+    let touchMove = e.changedTouches[0].pageX
+    let distance = touchMove - touchDot
+    if(distance >= threshold && pageUrl.left) {
+      wx.switchTab({url: pageUrl.left})
+    }
+    if(distance <= -threshold && pageUrl.right) {
+      wx.switchTab({url: pageUrl.right})
+    }
+  }
+}
+
+module.exports = {
+  touchStartFactory: touchStartFactory,
+  touchMoveFactory: touchMoveFactory
 }

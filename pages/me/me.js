@@ -29,7 +29,6 @@ Page({
       key: 'studentId',
       data: e.detail.value.studentId,
     })
-    wx.navigateBack()
   },
   clearInfo: function(e) {
     let that = this
@@ -45,16 +44,9 @@ Page({
     })
   },
   //触摸监听开始
-  touchStart: function (e) {
-    touch.touch_Start(e);
-  },
-  //监听触摸方向,dir表示触摸方向,1代表触摸向左,2代表向右
-  touchMove: function (e) {
-    var dir = touch.touch_Move(e);
-    if (dir == 2) {
-      wx.switchTab({
-        url: '../detail/detail',
-      })
-    }
-  },
+  touchStart: touch.touchStartFactory(),
+  //监听触摸方向
+  touchMove: touch.touchMoveFactory({
+    left: '../detail/detail'
+  }),
 })
