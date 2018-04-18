@@ -1,0 +1,6 @@
+node_modules
+dist
+.DB_store
+.wepycache
+project.config.json
+config.js

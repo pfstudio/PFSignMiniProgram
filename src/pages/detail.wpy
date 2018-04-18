@@ -1,0 +1,55 @@
+<style lang="less">
+</style>
+<template>
+  <view>
+    <picker mode="date" value="{{date}}" @change="dateChanged">
+      <view>
+        当前选择: {{date}}
+      </view>
+    </picker>
+    <scroll-view scroll-x>
+      <repeat for="{{records}}" item="record">
+        <view>{{record.name}}</view>
+        <view>{{record.signInTime}}</view>
+        <view>{{record.signOutTime}}</view>
+      </repeat>
+    </scroll-view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import moment from 'moment'
+  import api from '../utils/api'
+
+  export default class Index extends wepy.page {
+    config = {
+      enablePullDownRefresh: true,
+      backgroundColor: '#eee'
+    }
+
+    data = {
+      records: [],
+      date: moment().format('YYYY-MM-DD')
+    }
+
+    async onLoad() {
+      wepy.startPullDownRefresh()
+    }
+
+    async onPullDownRefresh() {
+      try {
+        this.records = await api.query({ begin: this.date })
+        this.$apply()
+      } catch (error) {
+        wepy.showToast({ title: error, icon: 'none' })
+      }
+      wepy.stopPullDownRefresh()
+    }
+
+    dateChanged(e) {
+      this.date = e.detail.value
+      wepy.startPullDownRefresh()
+    }
+  }
+</script>

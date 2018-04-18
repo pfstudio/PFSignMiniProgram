@@ -1,0 +1,73 @@
+<template>
+  <view>
+    <form @submit="saveInfo" @reset="clearInfo">
+      <view>
+        <view>学号</view>
+        <input name="studentId" placeholder="你的学号" value='{{studentId}}' />
+      </view>
+      <view>
+        <view>姓名</view>
+        <input name="name" placeholder="你的姓名" value='{{name}}' />
+      </view>
+      <view>
+        <button formType="submit">保存</button>
+        <button formType="reset">清空</button>
+      </view>
+    </form>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import { themeColor } from '../config'
+
+  export default class Index extends wepy.page {
+    data = {
+      name: '',
+      studentId: ''
+    }
+
+    async onLoad() {
+      // 从本地读取学号
+      this.studentId =
+        await wepy.getStorage({ key: 'studentId' })
+          .then(res => res.data).catch(() => '')
+      // 从本地读取姓名
+      this.name =
+        await wepy.getStorage({ key: 'name' })
+          .then(res => res.data).catch(() => '')
+      this.$apply()
+    }
+
+    async saveInfo(e) {
+      let value = e.detail.value
+      if (!(value.studentId && value.name)) {
+        wepy.showModal({
+          title: '信息错误',
+          content: '学号、姓名不能为空',
+          showCancel: false,
+          confirmColor: themeColor
+        })
+        return
+      }
+      // 写入本地
+      await wepy.setStorage({
+        key: 'studentId',
+        data: value.studentId
+      })
+      await wepy.setStorage({
+        key: 'name',
+        data: value.name
+      })
+      wepy.showToast({ title: '绑定成功' })
+    }
+
+    async clearInfo() {
+      await wepy.removeStorage({ key: 'studentId' })
+      await wepy.removeStorage({ key: 'name' })
+      this.studentId = ''
+      this.name = ''
+      this.$apply()
+      wepy.showToast({ title: '清除成功' })
+    }
+  }
+</script>
