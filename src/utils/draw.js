@@ -1,3 +1,4 @@
+//功能一：圆环
 //lines表示画线个数
 var lines=60;
 //x,y为圆环中心，r1,r2为圆环内外半径
@@ -38,6 +39,7 @@ export function cir(ctx,complete,total) {
   ctx.draw()
 }
 
+//功能二：画柱状图
 //颜色表
 var colors = ['#ee606f', '#fa9474', '#f9b778', '#efd387', '#e6f3a4', '#a4e49b', '#68d4b2', '#6dc8d4', '#688fd3']
 export function rec(ctx,lists)
