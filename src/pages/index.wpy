@@ -1,108 +1,37 @@
-<style lang="less">
-</style>
 <template>
   <view>
-    <button @tap="signIn">签到</button>
-    <button @tap="signOut">签退</button>
+    <button @tap="test">测试</button>
     <button @tap="bindInfo">绑定</button>
+    <view>{{canSign}}</view>
+    <sign :studentId.sync="studentId" :name.sync="name"></sign>    
   </view>
 </template>
 
 <script>
   import wepy from 'wepy'
-  import { themeColor, pfStudio } from '../config'
   import api from '../utils/api'
+  import InfoMixin from '../mixins/info'
+  import Sign from '../components/sign'
 
   export default class Index extends wepy.page {
-    data = {
-      name: '',
-      studentId: ''
+    // 混入InfoMixin
+    mixins = [ InfoMixin ]
+
+    // 导入签到组件
+    components = {
+      sign: Sign
     }
 
     async onShow() {
-      // 从本地读取学号
-      this.studentId = await wepy.getStorage({
-        key: 'studentId'
-      })
-      .then(res => res.data)
-      .catch(() => '')
-      // 从本地读取姓名
-      this.name = await wepy.getStorage({
-        key: 'name'
-      })
-      .then(res => res.data)
-      .catch(() => '')
-      this.$apply()
+      await this.getInfo()
     }
 
-    async signIn() {
-      // 判断信息是否为空
-      if (!(this.name && this.studentId)) {
-        // 跳转至绑定界面
-        await wepy.showModal({
-          title: '未绑定的用户',
-          content: '请先到绑定页面进行绑定',
-          showCancel: false,
-          confirmColor: themeColor
-        })
-        wepy.navigateTo({ url: 'bindInfo' })
-        return
-      }
-      // 判断是否在攀峰工作室
-      if (!await checkLocation()) {
-        await wepy.showToast({ title: '取消签到', icon: 'none' })
-        return
-      }
-
-      // 签到
-      try {
-        await api.signIn(this.studentId, this.name)
-        wepy.showToast({ title: '签到成功' })
-      } catch (error) {
-        wepy.showModal({
-          title: '签到失败',
-          content: error,
-          showCancel: false,
-          confirmColor: themeColor
-        })
-      }
-    }
-
-    async signOut() {
-      try {
-        await api.signOut(this.studentId)
-        wepy.showToast({ title: '签退成功' })
-      } catch (error) {
-        wepy.showModal({
-          title: '签退失败',
-          content: error,
-          showCancel: false,
-          confirmColor: themeColor
-        })
-      }
+    async test() {
+      console.log(await wepy.chooseImage())
     }
 
     bindInfo() {
       wepy.navigateTo({ url: 'bindInfo' })
-    }
-  }
-  
-  async function checkLocation() {
-    let loc = await wepy.getLocation()
-    const delta = 0.0005
-    if (Math.abs(loc.latitude - pfStudio.latitude) > delta ||
-      Math.abs(loc.longitude - pfStudio.longitude) > delta) {
-      let result = await wepy.showModal({
-        title: 'Warning!',
-        content: '检测到你未在攀峰工作室签到，或者你手机飘了',
-        confirmText: '仍要签到',
-        confirmColor: '#000',
-        cancelText: '取消签到',
-        cancelColor: themeColor
-      })
-      return result.confirm
-    } else {
-      return true
     }
   }
 </script>

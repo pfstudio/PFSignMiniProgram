@@ -6,7 +6,8 @@ export const service = {
     host,
     signInUrl: `${host}/Record/SignIn`,
     signOutUrl: `${host}/Record/SignOut`,
-    queryUrl: `${host}/Record/Query`
+    queryUrl: `${host}/Record/Query`,
+    reportUrl: `${host}/Report`
 }
 // 工作室经纬度
 export const pfStudio = {

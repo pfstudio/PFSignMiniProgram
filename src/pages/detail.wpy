@@ -7,44 +7,42 @@
         当前选择: {{date}}
       </view>
     </picker>
-    <scroll-view scroll-x>
-      <repeat for="{{records}}" item="record">
-        <view>{{record.name}}</view>
-        <view>{{record.signInTime}}</view>
-        <view>{{record.signOutTime}}</view>
-      </repeat>
-    </scroll-view>
+    <timeReport :date.sync="date"></timeReport>
+    <recordList :date.sync="date"></recordList>
   </view>
 </template>
 
 <script>
   import wepy from 'wepy'
+  import RecordList from '../components/recordList'
+  import TimeReport from '../components/timeReport'
   import moment from 'moment'
-  import api from '../utils/api'
 
-  export default class Index extends wepy.page {
+  export default class Detail extends wepy.page {
     config = {
       enablePullDownRefresh: true,
-      backgroundColor: '#eee'
+      backgroundColor: '#eee',
+      navigationBarTitleText: '签到详情'
+    }
+
+    components = {
+      recordList: RecordList,
+      timeReport: TimeReport
     }
 
     data = {
-      records: [],
-      date: moment().format('YYYY-MM-DD')
+      date: moment().format('YYYY/MM/DD')
     }
 
-    async onLoad() {
+    onShow() {
       wepy.startPullDownRefresh()
     }
 
     async onPullDownRefresh() {
-      try {
-        this.records = await api.query({ begin: this.date })
-        this.$apply()
-      } catch (error) {
-        wepy.showToast({ title: error, icon: 'none' })
-      }
+      wepy.showNavigationBarLoading()
+      await this.$invoke('recordList', 'refresh')
       wepy.stopPullDownRefresh()
+      wepy.hideNavigationBarLoading()
     }
 
     dateChanged(e) {

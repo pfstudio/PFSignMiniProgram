@@ -1,6 +1,26 @@
 import wepy from 'wepy'
 import { service } from '../config'
 
+async function _requestGET(url, obj) {
+  let res
+  try {
+    res = await wepy.request({
+      url: url,
+      method: 'GET',
+      dataType: 'json',
+      data: obj
+    })
+  } catch (error) {
+    throw '网络错误'
+  }
+
+  if (res.statusCode == 200) {
+    return res.data
+  } else {
+    throw '服务器异常'
+  }
+}
+
 async function signIn(studentId, name) {
   let res
   try {
@@ -42,26 +62,14 @@ async function signOut(studentId) {
   }
 }
 
-async function query(obj) {
-  let res
-  try {
-    res = await wepy.request({
-      url: service.queryUrl,
-      method: 'GET',
-      dataType: 'json',
-      data: obj
-    })
-  } catch (error) {
-    throw '网络错误'
-  }
-
-  if (res.statusCode == 200) {
-    return res.data
-  } else {
-    throw '服务器异常'
-  }
-}
-
 export default {
-  signIn, signOut, query
+  signIn, signOut,
+  query: obj =>
+    _requestGET(service.queryUrl, obj),
+  reportAll: obj =>
+    _requestGET(service.reportUrl, obj),
+  reportPerson: (studentId, obj) =>
+    _requestGET(`${service.reportUrl}/${studentId}`, obj),
+  reportPersonDetail: (studentId, obj) =>
+    _requestGET(`${service.reportUrl}/${studentId}/detail`, obj)
 }

@@ -1,0 +1,43 @@
+<template>
+  <view>
+    <view>学号:{{studentId}}</view>
+    <view>姓名:{{name}}</view>
+    <scroll-view>
+      <block wx:for="{{reports}}" wx:key="r" wx:for-item="report">
+        <view>{{report.date}}</view>
+        <view>{{report.timeSpan}}</view>
+      </block>
+    </scroll-view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import api from '../utils/api'
+
+  export default class PersonReport extends wepy.component {
+    props = {
+      date: String,
+      studentId: String,
+      name: String
+    }
+
+    data = {
+      studentId: '',
+      name: '',
+      reports: []
+    }
+
+    onLoad() {
+      this.refresh()
+    }
+
+    async refresh() {
+      try {
+        this.reports = await api.reportPersonDetail(this.studentId)
+        this.$apply()
+      } catch (error) {
+        wepy.showToast({ title: error, icon: 'none' })
+      }
+    }
+  }
+</script>

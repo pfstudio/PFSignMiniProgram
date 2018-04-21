@@ -19,54 +19,35 @@
 <script>
   import wepy from 'wepy'
   import { themeColor } from '../config'
+  import InfoMixin from '../mixins/info'
 
   export default class Index extends wepy.page {
-    data = {
-      name: '',
-      studentId: ''
-    }
-
-    async onLoad() {
-      // 从本地读取学号
-      this.studentId =
-        await wepy.getStorage({ key: 'studentId' })
-          .then(res => res.data).catch(() => '')
-      // 从本地读取姓名
-      this.name =
-        await wepy.getStorage({ key: 'name' })
-          .then(res => res.data).catch(() => '')
-      this.$apply()
-    }
+    // 混入InfoMixin
+    mixins = [ InfoMixin ]
 
     async saveInfo(e) {
-      let value = e.detail.value
-      if (!(value.studentId && value.name)) {
+      // 从表单中获取的数据
+      let info = e.detail.value
+      // 设置个人信息
+      try {
+        await this.setInfo(info)
+      } catch (error) {
         wepy.showModal({
           title: '信息错误',
-          content: '学号、姓名不能为空',
+          content: error,
           showCancel: false,
           confirmColor: themeColor
         })
         return
       }
-      // 写入本地
-      await wepy.setStorage({
-        key: 'studentId',
-        data: value.studentId
-      })
-      await wepy.setStorage({
-        key: 'name',
-        data: value.name
-      })
+      // 展示绑定成功
       wepy.showToast({ title: '绑定成功' })
     }
 
     async clearInfo() {
-      await wepy.removeStorage({ key: 'studentId' })
-      await wepy.removeStorage({ key: 'name' })
-      this.studentId = ''
-      this.name = ''
-      this.$apply()
+      // 删除本地数据
+      await this.removeInfo()
+      // 展示清除成功
       wepy.showToast({ title: '清除成功' })
     }
   }

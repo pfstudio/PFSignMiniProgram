@@ -1,0 +1,105 @@
+<template>
+  <view>
+    <view wx:if="{{canSign}}">可以签到</view>
+    <view wx:else>不能签到</view>
+    <view>已签到:{{timeSpan}}</view>
+    <view>要求签到:{{required}}</view>
+    <button @tap="signIn">签到</button>
+    <button @tap="signOut">签退</button>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import moment from 'moment'
+  import { themeColor } from '../config'
+  import { checkLocation } from '../utils/util'
+  import api from '../utils/api'
+
+  export default class Sign extends wepy.component {
+    props = {
+      studentId: String,
+      name: String
+    }
+
+    data = {
+      studentId: '',
+      name: '',
+      canSign: true,
+      required: 0,
+      timeSpan: 0
+    }
+
+    methods = {
+      signIn: this.signIn,
+      signOut: this.signOut
+    }
+
+    watch = {
+      studentId() {
+        this.refresh()
+      }
+    }
+
+    async signIn() {
+      // 判断信息是否为空
+      if (!(this.name && this.studentId)) {
+        // 跳转至绑定界面
+        await wepy.showModal({
+          title: '未绑定的用户',
+          content: '请先到绑定页面进行绑定',
+          showCancel: false,
+          confirmColor: themeColor
+        })
+        wepy.navigateTo({ url: 'bindInfo' })
+        return
+      }
+      // 判断是否在攀峰工作室
+      if (!await checkLocation()) {
+        await wepy.showToast({ title: '取消签到', icon: 'none' })
+        return
+      }
+
+      // 签到
+      try {
+        await api.signIn(this.studentId, this.name)
+        wepy.showToast({ title: '签到成功' })
+      } catch (error) {
+        wepy.showModal({
+          title: '签到失败',
+          content: error,
+          showCancel: false,
+          confirmColor: themeColor
+        })
+      }
+    }
+
+    // 签退
+    async signOut() {
+      try {
+        await api.signOut(this.studentId)
+        wepy.showToast({ title: '签退成功' })
+      } catch (error) {
+        wepy.showModal({
+          title: '签退失败',
+          content: error,
+          showCancel: false,
+          confirmColor: themeColor
+        })
+      }
+    }
+
+    // 刷新状态
+    async refresh() {
+      if (this.studentId) {
+        let res = await api.reportPerson(this.studentId)
+        this.required = moment.duration(res.required).asHours().toFixed(2)
+        this.timeSpan = moment.duration(res.timeSpan).asHours().toFixed(2)
+
+        let records = await api.query({ studentId: this.studentId })
+        this.canSign = records.every(record => record.signOutTime)
+
+        this.$apply()
+      }
+    }
+  }
+</script>

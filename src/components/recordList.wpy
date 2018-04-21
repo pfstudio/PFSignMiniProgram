@@ -1,0 +1,49 @@
+<template>
+  <view>
+    <scroll-view scroll-x @scrolltolower="loadMore">
+      <block wx:for="{{records}}" wx:key="r" wx:for-item="record">
+        <view>{{record.name}}</view>
+        <view>{{record.signInTime}}</view>
+        <view>{{record.signOutTime}}</view>
+      </block>
+    </scroll-view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import api from '../utils/api'
+
+  export default class RecordList extends wepy.component {
+    props = {
+      date: String
+    }
+
+    data = {
+      date: '',
+      records: []
+    }
+
+    watch = {
+      date(newValue, oldValue) {
+        this.refresh()
+      }
+    }
+
+    onLoad() {
+      this.refresh()
+    }
+
+    async refresh() {
+      try {
+        this.records = await api.query({ begin: this.date })
+        this.$apply()
+      } catch (error) {
+        wepy.showToast({ title: error, icon: 'none' })
+      }
+    }
+
+    loadMore(e) {
+      console.log(e)
+    }
+  }
+</script>
