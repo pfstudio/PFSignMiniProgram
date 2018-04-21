@@ -50,9 +50,9 @@ export function rec(ctx,lists)
     ctx.setFillStyle('black')
     //字体生成函数
     ctx.fillText(lists[count].name, 10, 30+50* count)
-    //获得矩阵填充矩阵
+    //获得矩阵填充颜色
     ctx.setFillStyle(colors[count % colors.length])
-    //画矩阵
+    //画矩形,属性分别为左上角坐标x,y,长宽
     ctx.fillRect(50, 15+count * 50, lists[count].timeSpan*10, 20)
   }
   ctx.draw()
