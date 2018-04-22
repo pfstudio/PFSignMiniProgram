@@ -1,15 +1,11 @@
 <template>
   <view>
-    <button @tap="test">测试</button>
-    <button @tap="bindInfo">绑定</button>
-    <view>{{canSign}}</view>
-    <sign :studentId.sync="studentId" :name.sync="name"></sign>    
+    <sign :studentId.sync="studentId" :name.sync="name"></sign>
   </view>
 </template>
 
 <script>
   import wepy from 'wepy'
-  import api from '../utils/api'
   import InfoMixin from '../mixins/info'
   import Sign from '../components/sign'
 
@@ -24,14 +20,6 @@
 
     async onShow() {
       await this.getInfo()
-    }
-
-    async test() {
-      console.log(await wepy.chooseImage())
-    }
-
-    bindInfo() {
-      wepy.navigateTo({ url: 'bindInfo' })
     }
   }
 </script>

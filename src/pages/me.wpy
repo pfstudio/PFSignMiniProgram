@@ -1,11 +1,37 @@
 <template>
   <view>
-      This is me page.
-      <personReport studentId="16073120" name="毛寅滔"></personReport>
+    <navigator url="bindInfo" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
+      <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+        <!--头像-->
+        <image class="weui-media-box__thumb" src="{{avatarUrl}}" />
+      </view>
+      <view class="weui-media-box__bd">
+        <!-- 姓名 -->
+        <view class="weui-media-box__title">{{name}}</view>
+        <!-- 学号 -->
+        <view class="weui-media-box__desc">{{studentId}}</view>
+      </view>
+      <button @tap="switchAccount">切换账号</button>
+    </navigator>
+
+    <view>
+      <view class="weui-cells__title">基本信息</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_access">
+          <view class="weui-cell__bd">签到记录</view>
+          <view @tap="showDetail" class="weui-cell__ft weui-cell__ft_in-access" style="font-size: 0">
+            <view style="display: inline-block;vertical-align:middle; font-size: 17px;">详细信息</view>
+          </view>
+        </view>
+      </view>
+      <personReport :studentId.sync="studentId" :name.sync="name"></personReport>
+    </view>
   </view>
 </template>
 <script>
   import wepy from 'wepy'
+  import moment from 'moment'
+  import InfoMixin from '../mixins/info'
   import PersonReport from '../components/personReport'
 
   export default class Me extends wepy.page {
@@ -13,8 +39,37 @@
       navigationBarTitleText: '我的信息'
     }
 
+    mixins = [ InfoMixin ]
+
     components = {
       personReport: PersonReport
+    }
+
+    data = {
+      avatarUrl: '/images/me.png'
+    }
+
+    async onLoad() {
+      try {
+        let userInfo = await wepy.getUserInfo()
+        this.avatarUrl = userInfo.userInfo.avatarUrl
+        this.$apply()
+      } catch (error) {
+        wepy.showToast({ title: '获取头像失败', icon: 'none' })
+      }
+    }
+
+    async switchAccount() {
+      await this.removeInfo()
+      wepy.reLaunch({ url: '/pages/bindInfo' })
+    }
+
+    showDetail() {
+      wepy.navigateTo({
+        url: `/pages/detail?studentId=${this.studentId}` +
+        `&begin=${moment().add(-7, 'days').format('YYYY/MM/DD')}` +
+        `&end=${moment().format('YYYY/MM/DD')}`
+      })
     }
   }
 </script>

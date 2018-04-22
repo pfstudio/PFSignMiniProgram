@@ -1,21 +1,28 @@
-<style lang="less">
-</style>
 <template>
-  <view>
-    <picker mode="date" value="{{date}}" @change="dateChanged">
-      <view>
-        当前选择: {{date}}
+  <scroll-view scroll-y="true" style="height:{{scrollHeight}}px;" @scrolltolower="loadMore">
+    <block wx:for="{{records}}" wx:key="r" wx:for-item="record">
+      <view class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
+        <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+          <view class="weui-media-box__title">{{record.name}}</view>
+        </view>
       </view>
-    </picker>
-    <timeReport :date.sync="date"></timeReport>
-    <recordList :date.sync="date"></recordList>
-  </view>
+      <view class=" page__bd_spacing">
+        <view class="weui-flex">
+          <view class="weui-flex__item">
+            <view class="placeholder">签到时间：</view>{{record.signInTime}}
+          </view>
+          <view class="weui-flex__item">
+            <view class="placeholder">签退时间：</view>{{record.signOutTime}}
+          </view>
+        </view>
+      </view>
+    </block>
+  </scroll-view>
 </template>
 
 <script>
   import wepy from 'wepy'
-  import RecordList from '../components/recordList'
-  import TimeReport from '../components/timeReport'
+  import api from '../utils/api'
   import moment from 'moment'
 
   export default class Detail extends wepy.page {
@@ -25,13 +32,29 @@
       navigationBarTitleText: '签到详情'
     }
 
-    components = {
-      recordList: RecordList,
-      timeReport: TimeReport
+    data = {
+      studentId: '',
+      begin: moment().format('YYYY/MM/DD'),
+      end: '',
+      records: []
     }
 
-    data = {
-      date: moment().format('YYYY/MM/DD')
+    computed = {
+      scrollHeight() {
+        return wepy.getSystemInfoSync().windowHeight
+      }
+    }
+
+    watch = {
+      date(newValue, oldValue) {
+        this.refresh()
+      }
+    }
+
+    onLoad(options) {
+      this.studentId = options.studentId || this.studentId
+      this.begin = options.begin || this.begin
+      this.end = options.end || this.end
     }
 
     onShow() {
@@ -40,14 +63,35 @@
 
     async onPullDownRefresh() {
       wepy.showNavigationBarLoading()
-      await this.$invoke('recordList', 'refresh')
+      await this.refresh()
       wepy.stopPullDownRefresh()
       wepy.hideNavigationBarLoading()
     }
 
-    dateChanged(e) {
-      this.date = e.detail.value
-      wepy.startPullDownRefresh()
+    async refresh() {
+      try {
+        this.records = await api.query({
+          begin: this.begin || this.date,
+          end: this.end,
+          studentId: this.studentId
+        })
+        this.$apply()
+      } catch (error) {
+        wepy.showToast({ title: error, icon: 'none' })
+      }
+    }
+
+    async loadMore(e) {
+      wepy.showLoading({ title: '加载中' })
+      let res = await api.query({
+        begin: this.begin || this.date,
+        end: this.end,
+        studentId: this.studentId,
+        skip: this.records.length
+      })
+      this.records.push(...res)
+      this.$apply()
+      wepy.hideLoading()
     }
   }
 </script>

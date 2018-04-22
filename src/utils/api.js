@@ -17,6 +17,7 @@ async function _requestGET(url, obj) {
   if (res.statusCode == 200) {
     return res.data
   } else {
+    console.log(res)
     throw '服务器异常'
   }
 }
@@ -71,5 +72,5 @@ export default {
   reportPerson: (studentId, obj) =>
     _requestGET(`${service.reportUrl}/${studentId}`, obj),
   reportPersonDetail: (studentId, obj) =>
-    _requestGET(`${service.reportUrl}/${studentId}/detail`, obj)
+    _requestGET(`${service.reportUrl}/${studentId || '0'}/detail`, obj)
 }

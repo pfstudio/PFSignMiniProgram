@@ -1,11 +1,27 @@
 <template>
   <view>
-    <view>学号:{{studentId}}</view>
-    <view>姓名:{{name}}</view>
     <scroll-view>
+      <view class=" page__bd_spacing">
+        <view class="weui-flex">
+          <view class="weui-flex__item">
+            <view class="placeholder">日期</view>
+          </view>
+          <view class="weui-flex__item">
+            <view class="placeholder">总时长</view>
+          </view>
+        </view>
+      </view>
       <block wx:for="{{reports}}" wx:key="r" wx:for-item="report">
-        <view>{{report.date}}</view>
-        <view>{{report.timeSpan}}</view>
+        <view class=" page__bd_spacing">
+          <view class="weui-flex">
+            <view class="weui-flex__item">
+              <view class="placeholder">{{report.date}}</view>
+            </view>
+            <view class="weui-flex__item">
+              <view class="placeholder">{{report.timeSpan}}</view>
+            </view>
+          </view>
+        </view>
       </block>
     </scroll-view>
   </view>
@@ -27,8 +43,14 @@
       reports: []
     }
 
-    onLoad() {
-      this.refresh()
+    watch = {
+      studentId() {
+        this.refresh()
+      }
+    }
+
+    async onLoad() {
+      await this.refresh()
     }
 
     async refresh() {

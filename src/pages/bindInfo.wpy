@@ -1,20 +1,29 @@
 <template>
-  <view>
-    <form @submit="saveInfo" @reset="clearInfo">
-      <view>
-        <view>学号</view>
-        <input name="studentId" placeholder="你的学号" value='{{studentId}}' />
+  <form @submit="saveInfo" @reset="clearInfo">
+    <!-- 学号 -->
+    <view class="weui-cell weui-cell_input">
+      <view class="weui-cell__hd">
+        <view class="weui-label">学号</view>
       </view>
-      <view>
-        <view>姓名</view>
-        <input name="name" placeholder="你的姓名" value='{{name}}' />
+      <view class="weui-cell__bd">
+        <input name="studentId" class="weui-input" value="{{studentId}}" />
       </view>
-      <view>
-        <button formType="submit">保存</button>
-        <button formType="reset">清空</button>
+    </view>
+    <!-- 姓名 -->
+    <view class="weui-cell weui-cell_input">
+      <view class="weui-cell__hd">
+        <view class="weui-label">姓名</view>
       </view>
-    </form>
-  </view>
+      <view class="weui-cell__bd">
+        <input name="name" class="weui-input"  value="{{name}}"  />
+      </view>
+    </view>
+    <!-- 保存/重置 -->
+    <view>
+      <button formType="submit" class="weui-btn" type="default" plain="true">绑定</button>
+      <!-- <button hidden="{{!(studentId&&name)}}" formType="reset" class="weui-btn" type="warn" plain="true">清空</button> -->
+    </view>
+  </form>
 </template>
 <script>
   import wepy from 'wepy'
@@ -24,6 +33,13 @@
   export default class Index extends wepy.page {
     // 混入InfoMixin
     mixins = [ InfoMixin ]
+
+    async onLoad() {
+      await this.getInfo()
+      if (this.studentId && this.name) {
+        wepy.switchTab({ url: '/pages/index' })
+      }
+    }
 
     async saveInfo(e) {
       // 从表单中获取的数据
@@ -40,15 +56,8 @@
         })
         return
       }
-      // 展示绑定成功
-      wepy.showToast({ title: '绑定成功' })
-    }
-
-    async clearInfo() {
-      // 删除本地数据
-      await this.removeInfo()
-      // 展示清除成功
-      wepy.showToast({ title: '清除成功' })
+      await wepy.showToast({ title: '绑定成功' })
+      wepy.switchTab({ url: '/pages/index' })
     }
   }
 </script>
