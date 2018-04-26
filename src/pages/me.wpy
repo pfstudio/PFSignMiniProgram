@@ -24,15 +24,38 @@
           </view>
         </view>
       </view>
-      <personReport :studentId.sync="studentId" :name.sync="name"></personReport>
     </view>
+    <scroll-view>
+      <view class=" page__bd_spacing">
+        <view class="weui-flex">
+          <view class="weui-flex__item">
+            <view class="placeholder">日期</view>
+          </view>
+          <view class="weui-flex__item">
+            <view class="placeholder">总时长</view>
+          </view>
+        </view>
+      </view>
+      <block wx:for="{{reports}}" wx:key="r" wx:for-item="report">
+        <view class=" page__bd_spacing">
+          <view class="weui-flex">
+            <view class="weui-flex__item">
+              <view class="placeholder">{{report.date}}</view>
+            </view>
+            <view class="weui-flex__item">
+              <view class="placeholder">{{report.timeSpan}}</view>
+            </view>
+          </view>
+        </view>
+      </block>
+    </scroll-view>
   </view>
 </template>
 <script>
   import wepy from 'wepy'
   import moment from 'moment'
   import InfoMixin from '../mixins/info'
-  import PersonReport from '../components/personReport'
+  import api from '../utils/api'
 
   export default class Me extends wepy.page {
     config = {
@@ -41,12 +64,9 @@
 
     mixins = [ InfoMixin ]
 
-    components = {
-      personReport: PersonReport
-    }
-
     data = {
-      avatarUrl: '/images/me.png'
+      avatarUrl: '/images/me.png',
+      reports: []
     }
 
     async onLoad() {
@@ -57,6 +77,10 @@
       } catch (error) {
         wepy.showToast({ title: '获取头像失败', icon: 'none' })
       }
+    }
+
+    async onShow() {
+      await this.refresh()
     }
 
     async switchAccount() {
@@ -70,6 +94,21 @@
         `&begin=${moment().add(-7, 'days').format('YYYY/MM/DD')}` +
         `&end=${moment().format('YYYY/MM/DD')}`
       })
+    }
+
+    watch = {
+      studentId() {
+        this.refresh()
+      }
+    }
+
+    async refresh() {
+      try {
+        this.reports = await api.reportPersonDetail(this.studentId)
+        this.$apply()
+      } catch (error) {
+        wepy.showToast({ title: error, icon: 'none' })
+      }
     }
   }
 </script>
