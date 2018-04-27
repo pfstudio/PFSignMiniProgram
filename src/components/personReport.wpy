@@ -1,31 +1,41 @@
 <template>
   <view>
     <scroll-view>
-      <view class=" page__bd_spacing">
-        <view class="weui-flex">
+      <view style="border: 10rpx soild blank;">
+      <view class=" page__bd_spacing" style="border: 0rpx solid darkgray;">
+        <view class="weui-flex" style="background: #3366FF;width: 100%;">
           <view class="weui-flex__item">
-            <view class="placeholder">日期</view>
+            <view class="placeholder" style="width: 40%;justify-content: center;background: #3366FF;color: #fff;display: flex;align-items: center;">日期</view>
           </view>
           <view class="weui-flex__item">
-            <view class="placeholder">总时长</view>
+            <view class="placeholder" style="width: 40%;justify-content: center;background: #3366FF;color: #fff;display: flex;align-items: center;">总时长</view>
           </view>
         </view>
       </view>
       <block wx:for="{{reports}}" wx:key="r" wx:for-item="report">
         <view class=" page__bd_spacing">
-          <view class="weui-flex">
+          <view class="weui-flex" wx:if="{{index % 2 == 0}}" style="display: flex;width: 100%;justify-content: center;height: 3rem;align-items: center;background: #E6F3F9;">
             <view class="weui-flex__item">
-              <view class="placeholder">{{report.date}}</view>
+              <view class="placeholder" style="width:40%;justify-content: center;text-align: center;">{{report.date}}</view>
             </view>
             <view class="weui-flex__item">
-              <view class="placeholder">{{report.timeSpan}}</view>
+              <view class="placeholder" style="width:40%;justify-content: center;text-align: center;">{{report.timeSpan}}</view>
+            </view>
+          </view>
+          <view class="weui-flex" wx:else style="display: flex;width: 100%;justify-content: center;height: 3rem;align-items: center;">
+            <view class="weui-flex__item">
+              <view class="placeholder" style="width:40%;justify-content: center;text-align: center;">{{report.date}}</view>
+            </view>
+            <view class="weui-flex__item">
+              <view class="placeholder" style="width:40%;justify-content: center;text-align: center;">{{report.timeSpan}}</view>
             </view>
           </view>
         </view>
       </block>
+    </view>
     </scroll-view>
   </view>
-</template>
+  </template>    
 <script>
   import wepy from 'wepy'
   import api from '../utils/api'

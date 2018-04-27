@@ -24,7 +24,9 @@
           </view>
         </view>
       </view>
+      <view style="margin:0;padding:0;">
       <personReport :studentId.sync="studentId" :name.sync="name"></personReport>
+    </view>
     </view>
   </view>
 </template>

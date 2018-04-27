@@ -1,21 +1,22 @@
 <template>
   <view>
-    <canvas canvas-id="timeRing" style="width:750rpx;height:750rpx;"/>
-    <view class="page__bd_spacing">
-      <view class="weui-flex">
-        <view class="weui-flex__item">
-          <view class="placeholder">已签到时长</view>
-          <text>{{timeSpan}} h</text>
-        </view>
-        <view class="weui-flex__item">
-          <view class="placeholder">要求签到时长</view>
-          <text>{{required}} h</text>
-        </view>
+      <canvas canvas-id="timeRing" style="width:750rpx;height:750rpx;"/>
+      <view class="page__bd_spacing">
+          <view class="weui-flex">
+              <view class="weui-flex__item" style="position:absolute; top:300rpx;left:280rpx;font-size:80rpx">
+          <!-- <view class="placeholder">已签到时长</view> -->
+              <text>{{timeSpan}} h</text>
+          </view>
+          <view class="weui-flex__item" style="position:absolute; top:400rpx;left:400rpx; font-color:#9A9A9A;font-size:50rpx;">
+            <!-- <view class="placeholder">要求签到时长</view> -->
+            <text>{{required}} h</text>
+          </view>                                              
       </view>
-    </view>
-    <button hidden="{{!canSign}}" @tap="signIn" class="weui-btn" type="primary" plain="true">签到</button>
-    <button hidden="{{canSign}}" @tap="signOut" class="weui-btn" type="warn" plain="true">签退</button>
+    <button hidden="{{!canSign}}" @tap="signIn" class="weui_btn weui_btn_plain_default" plain="true" style="width:50%; position:absolute; top:750rpx;left:200rpx;">签到</button>
+    <button hidden="{{canSign}}" @tap="signOut" class="weui-btn" type="warn" plain="true" style="width:50%; position:absolute; top:750rpx;left:200rpx;">签退</button>
   </view>
+</view>
+</view>
 </template>
 <script>
   import wepy from 'wepy'

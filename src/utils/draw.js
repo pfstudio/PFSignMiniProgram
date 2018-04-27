@@ -18,7 +18,7 @@ export async function drawRing(ctx, rate) {
   // 初始位置定位最上方的-pi/2
   var now = -Math.PI / 2
   // 设定已完成进度的颜色
-  ctx.setStrokeStyle('#66ccff')
+  ctx.setStrokeStyle('#1F84F8')
   // 设定线条宽度
   ctx.setLineWidth(3)
 

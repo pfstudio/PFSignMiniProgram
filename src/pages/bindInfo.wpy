@@ -1,4 +1,16 @@
+<style>
+ .form{
+  margin-top:50rpx;
+  margin-left:75rpx;
+  height: 75%;
+  width: 75%;
+ }
+</style>
 <template>
+  <view style="margin-top:100rpx;margin-left:275rpx;">
+    <image style="width: 200rpx; height: 200rpx;"src="https://image.hdulxy.cn/mytyiluo@outlook.com/PFStudio_logo.png"/>
+  </view>
+  <view class="form">
   <form @submit="saveInfo" @reset="clearInfo">
     <!-- 学号 -->
     <view class="weui-cell weui-cell_input">
@@ -24,6 +36,7 @@
       <!-- <button hidden="{{!(studentId&&name)}}" formType="reset" class="weui-btn" type="warn" plain="true">清空</button> -->
     </view>
   </form>
+</view>
 </template>
 <script>
   import wepy from 'wepy'
