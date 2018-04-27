@@ -1,20 +1,40 @@
+<style>
+.btn{
+  width:50%;
+  position:absolute;
+  bottom:200rpx;
+  left:200rpx;
+}
+.rate{
+  text-align: center;
+  margin: auto;
+  position: absolute;
+  top: 320rpx;
+  left: 0;
+  right: 0;
+  font-size: 100rpx;
+}
+.time{
+  text-align: center;
+  margin: auto;
+  margin-top: -70rpx;
+  font-weight: bold;
+  color: grey;
+}
+</style>
+
 <template>
   <view>
     <canvas canvas-id="timeRing" style="width:750rpx;height:750rpx;"/>
-    <view class="page__bd_spacing">
-      <view class="weui-flex">
-        <view class="weui-flex__item">
-          <view class="placeholder">已签到时长</view>
-          <text>{{timeSpan}} h</text>
-        </view>
-        <view class="weui-flex__item">
-          <view class="placeholder">要求签到时长</view>
-          <text>{{required}} h</text>
-        </view>
-      </view>
+    <cover-view class="rate">
+      {{rate}} %
+    </cover-view>
+    <view class="time">
+      <text style="margin-right:20rpx;">已签到: {{timeSpan}} H</text>
+      <text>需签到时间: {{required}} H</text>
     </view>
-    <button hidden="{{!canSign}}" @tap="signIn" class="weui-btn" type="primary" plain="true">签到</button>
-    <button hidden="{{canSign}}" @tap="signOut" class="weui-btn" type="warn" plain="true">签退</button>
+    <button hidden="{{!canSign}}" @tap="signIn" class="weui-btn btn" plain="true">签到</button>
+    <button hidden="{{canSign}}" @tap="signOut" class="weui-btn btn" type="warn" plain="true">签退</button>
   </view>
 </template>
 
@@ -37,10 +57,6 @@
       timeSpan: 0
     }
 
-    async onShow() {
-      await this.getInfo()
-    }
-
     watch = {
       // 当学号发生变化时，更新状态
       async studentId() {
@@ -52,9 +68,21 @@
       }
     }
 
+    computed = {
+      rate() {
+        let r = this.timeSpan / this.required
+        r = (r || 0) * 100
+        return r > 100 ? 100 : Math.ceil(r)
+      }
+    }
+
     async onLoad() {
+      await this.getInfo()
       await this.refresh()
       await this.draw()
+    }
+    async onShow() {
+      await this.getInfo()
     }
 
     // 签到

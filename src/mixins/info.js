@@ -6,10 +6,6 @@ export default class InfoMixin extends wepy.mixin {
     name: ''
   }
 
-  async onLoad() {
-    await this.getInfo()
-  }
-
   async getInfo() {
     // TODO: 若本地不存在信息，从服务器获取与微信绑定的信息
     // 从本地读取学号

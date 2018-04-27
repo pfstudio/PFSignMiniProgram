@@ -1,29 +1,45 @@
+<style>
+.form{
+  margin-top: 50rpx;
+  margin-left: 75rpx;
+  width: 75%;
+  height: 75%;
+}
+.submit{
+  width: 50%;
+  margin-top:50rpx;
+}
+</style>
 <template>
-  <form @submit="saveInfo" @reset="clearInfo">
-    <!-- 学号 -->
-    <view class="weui-cell weui-cell_input">
-      <view class="weui-cell__hd">
-        <view class="weui-label">学号</view>
+<view>
+  <view style="margin-top:100rpx;margin-left:275rpx;">
+    <image style="width: 200rpx; height: 200rpx;"src="https://image.hdulxy.cn/mytyiluo@outlook.com/PFStudio_logo.png"/>
+  </view>
+  <view class="form">
+    <form @submit="saveInfo">
+      <!-- 学号 -->
+      <view class="weui-cell weui-cell_input">
+        <view class="weui-cell__hd">
+          <view class="weui-label">学号</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input name="studentId" class="weui-input" value="{{studentId}}" />
+        </view>
       </view>
-      <view class="weui-cell__bd">
-        <input name="studentId" class="weui-input" value="{{studentId}}" />
+      <!-- 姓名 -->
+      <view class="weui-cell weui-cell_input">
+        <view class="weui-cell__hd">
+          <view class="weui-label">姓名</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input name="name" class="weui-input"  value="{{name}}"  />
+        </view>
       </view>
-    </view>
-    <!-- 姓名 -->
-    <view class="weui-cell weui-cell_input">
-      <view class="weui-cell__hd">
-        <view class="weui-label">姓名</view>
-      </view>
-      <view class="weui-cell__bd">
-        <input name="name" class="weui-input"  value="{{name}}"  />
-      </view>
-    </view>
-    <!-- 保存/重置 -->
-    <view>
-      <button formType="submit" class="weui-btn" type="default" plain="true">绑定</button>
-      <!-- <button hidden="{{!(studentId&&name)}}" formType="reset" class="weui-btn" type="warn" plain="true">清空</button> -->
-    </view>
-  </form>
+      <!-- 保存/重置 -->
+      <button formType="submit" class="weui-btn submit" type="default" plain="true">绑定</button>
+    </form>
+  </view>
+</view>
 </template>
 <script>
   import wepy from 'wepy'

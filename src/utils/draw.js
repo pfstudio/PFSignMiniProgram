@@ -1,7 +1,7 @@
 import wepy from 'wepy'
 
 // 画线个数
-const lines = 60
+const lines = 72
 
 export async function drawRing(ctx, rate) {
   // 获取设备屏幕宽度
@@ -18,7 +18,7 @@ export async function drawRing(ctx, rate) {
   // 初始位置定位最上方的-pi/2
   var now = -Math.PI / 2
   // 设定已完成进度的颜色
-  ctx.setStrokeStyle('#66ccff')
+  ctx.setStrokeStyle('#0066FF')
   // 设定线条宽度
   ctx.setLineWidth(3)
 
