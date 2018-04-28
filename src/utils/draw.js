@@ -13,7 +13,7 @@ export async function drawRing(ctx, rate) {
   let r1 = systemInfo.windowWidth / 3
   // 圆环的内径
   let r2 = r1 - 15
-  let frontLines = rate * 60
+  let frontLines = rate * lines
 
   // 初始位置定位最上方的-pi/2
   var now = -Math.PI / 2
